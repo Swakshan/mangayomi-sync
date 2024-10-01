@@ -24,8 +24,13 @@ services:
       - .env
     environment:
       - MYSQL_ROOT_HOST=%
+    volumes:
+      - database-data:/var/lib/mysql
     networks:
       - dokploy-network
+
+volumes:
+  database-data:
 
 networks:
   dokploy-network:
