@@ -1,0 +1,32 @@
+services:
+  server:
+    image: ghcr.io/cufee/mangayomi-sync
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MODE=prod
+      - DATABASE_URI="mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@database:3306/$cle{MYSQL_DATABASE}"
+      - DB_DIALECT=mysql
+    depends_on:
+      database:
+        condition: service_started
+    networks:
+      - dokploy-network
+
+  database:
+    image: mysql/mysql-server:8.0
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_HOST=%
+    networks:
+      - dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
