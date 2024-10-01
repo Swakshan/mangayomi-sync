@@ -2,6 +2,9 @@ FROM node:21 as builder
 
 WORKDIR /app
 
+# Install pnpm
+RUN npm install -g pnpm
+
 # Install dependencies
 COPY --chown=node:node package.json pnpm-lock.yaml ./
 RUN pnpm install
