@@ -9,7 +9,7 @@ services:
       - .env
     environment:
       - MODE=prod
-      - DATABASE_URI="mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@database:3306/$cle{MYSQL_DATABASE}"
+      - DATABASE_URI=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@database:3306/${MYSQL_DATABASE}
       - DB_DIALECT=mysql
     depends_on:
       database:
