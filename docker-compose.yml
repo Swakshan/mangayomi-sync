@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/cufee/mangayomi-sync
+    image: ghcr.io/schnitzel5/cozy-furnace
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,9 +13,9 @@ services:
       - DB_DIALECT=mysql
     depends_on:
       database:
-        condition: service_started
-    networks:
-      - dokploy-network
+        condition: service_healthy
+    ports:
+      - ${PORT}
 
   database:
     image: mysql/mysql-server:8.0
@@ -24,14 +24,14 @@ services:
       - .env
     environment:
       - MYSQL_ROOT_HOST=%
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 1s
+      retries: 15
     volumes:
       - database-data:/var/lib/mysql
-    networks:
-      - dokploy-network
 
 volumes:
   database-data:
-
-networks:
-  dokploy-network:
-    external: true
